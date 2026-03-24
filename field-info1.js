@@ -1,59 +1,68 @@
 (function () {
   console.log("field-info1 loaded");
 
-  const tooltips = {
-    "Dwelling Limit": "A dwelling limit is the maximum amount your home insurance pays."
-  };
+  const tooltipText = "A dwelling limit is the maximum amount your home insurance pays.";
 
   function normalizeText(text) {
     return (text || "")
       .replace(/\s+/g, " ")
       .replace(/\*/g, "")
-      .trim();
+      .trim()
+      .toLowerCase();
+  }
+
+  function alreadyHasIcon(node) {
+    return !!node.querySelector(".custom-info-wrap");
+  }
+
+  function tryAttachToNode(node) {
+    if (!node || alreadyHasIcon(node)) return false;
+
+    const text = normalizeText(node.textContent);
+    if (!text.includes("dwelling limit")) return false;
+
+    const wrap = document.createElement("span");
+    wrap.className = "custom-info-wrap";
+
+    const icon = document.createElement("span");
+    icon.className = "custom-info-icon";
+    icon.textContent = "i";
+
+    const tip = document.createElement("span");
+    tip.className = "custom-info-tip";
+    tip.textContent = tooltipText;
+
+    wrap.appendChild(icon);
+    wrap.appendChild(tip);
+    node.appendChild(wrap);
+
+    console.log("Attached tooltip to:", node);
+    return true;
   }
 
   function addInfoButtons() {
     const selectors = [
       "label",
+      "legend",
+      "span",
+      "div",
+      "p",
       ".label",
       ".field-label",
-      ".title",
       ".form_label",
-      ".legend",
       ".field-title",
-      ".frm-label"
+      ".frm-label",
+      ".title"
     ].join(",");
 
-    const labels = document.querySelectorAll(selectors);
-    console.log("labels found:", labels.length);
+    const nodes = document.querySelectorAll(selectors);
+    let attached = 0;
 
-    labels.forEach((node) => {
-      if (node.dataset.infoProcessed === "true") return;
-
-      const labelText = normalizeText(node.textContent);
-      const tooltipText = tooltips[labelText];
-
-      if (!tooltipText) return;
-
-      node.dataset.infoProcessed = "true";
-
-      const wrap = document.createElement("span");
-      wrap.className = "custom-info-wrap";
-
-      const icon = document.createElement("span");
-      icon.className = "custom-info-icon";
-      icon.textContent = "i";
-
-      const tip = document.createElement("span");
-      tip.className = "custom-info-tip";
-      tip.textContent = tooltipText;
-
-      wrap.appendChild(icon);
-      wrap.appendChild(tip);
-      node.appendChild(wrap);
-
-      console.log("info added to:", labelText);
+    nodes.forEach((node) => {
+      if (tryAttachToNode(node)) attached++;
     });
+
+    console.log("Tooltip attachments:", attached);
   }
 
   function init() {
