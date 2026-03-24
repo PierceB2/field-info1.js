@@ -1,19 +1,25 @@
 (function () {
+
+  // ADD YOUR FIELD LABELS + TOOLTIP TEXT HERE
+  const tooltips = {
+    "Dwelling Limit": "A dwelling limit is the maximum amount your home insurance pays."
+  };
+
   function addInfoButtons() {
-    const labels = document.querySelectorAll("label, .label, .field-label, .title, .form_label");
+
+    const labels = document.querySelectorAll(
+      "label, .label, .field-label, .title, .form_label"
+    );
 
     labels.forEach((node) => {
+
       if (node.dataset.infoProcessed === "true") return;
 
-      const raw = node.textContent;
-      const match = raw && raw.match(/\[info:(.*?)\]/i);
-      if (!match) return;
+      const labelText = node.textContent.trim();
 
-      const infoText = match[1].trim();
-      const cleanedText = raw.replace(match[0], "").trim();
+      if (!tooltips[labelText]) return;
 
       node.dataset.infoProcessed = "true";
-      node.textContent = cleanedText + " ";
 
       const wrap = document.createElement("span");
       wrap.className = "custom-info-wrap";
@@ -24,7 +30,7 @@
 
       const tip = document.createElement("span");
       tip.className = "custom-info-tip";
-      tip.textContent = infoText;
+      tip.textContent = tooltips[labelText];
 
       wrap.appendChild(icon);
       wrap.appendChild(tip);
@@ -37,7 +43,10 @@
     addInfoButtons();
 
     const observer = new MutationObserver(addInfoButtons);
-    observer.observe(document.body, { childList: true, subtree: true });
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true
+    });
   }
 
   if (document.readyState === "loading") {
@@ -45,4 +54,5 @@
   } else {
     init();
   }
+
 })();
