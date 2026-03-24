@@ -1,23 +1,39 @@
 (function () {
+  console.log("field-info1 loaded");
 
-  // ADD YOUR FIELD LABELS + TOOLTIP TEXT HERE
   const tooltips = {
     "Dwelling Limit": "A dwelling limit is the maximum amount your home insurance pays."
   };
 
-  function addInfoButtons() {
+  function normalizeText(text) {
+    return (text || "")
+      .replace(/\s+/g, " ")
+      .replace(/\*/g, "")
+      .trim();
+  }
 
-    const labels = document.querySelectorAll(
-      "label, .label, .field-label, .title, .form_label"
-    );
+  function addInfoButtons() {
+    const selectors = [
+      "label",
+      ".label",
+      ".field-label",
+      ".title",
+      ".form_label",
+      ".legend",
+      ".field-title",
+      ".frm-label"
+    ].join(",");
+
+    const labels = document.querySelectorAll(selectors);
+    console.log("labels found:", labels.length);
 
     labels.forEach((node) => {
-
       if (node.dataset.infoProcessed === "true") return;
 
-      const labelText = node.textContent.trim();
+      const labelText = normalizeText(node.textContent);
+      const tooltipText = tooltips[labelText];
 
-      if (!tooltips[labelText]) return;
+      if (!tooltipText) return;
 
       node.dataset.infoProcessed = "true";
 
@@ -26,23 +42,27 @@
 
       const icon = document.createElement("span");
       icon.className = "custom-info-icon";
-      icon.innerText = "i";
+      icon.textContent = "i";
 
       const tip = document.createElement("span");
       tip.className = "custom-info-tip";
-      tip.textContent = tooltips[labelText];
+      tip.textContent = tooltipText;
 
       wrap.appendChild(icon);
       wrap.appendChild(tip);
-
       node.appendChild(wrap);
+
+      console.log("info added to:", labelText);
     });
   }
 
   function init() {
     addInfoButtons();
 
-    const observer = new MutationObserver(addInfoButtons);
+    const observer = new MutationObserver(() => {
+      addInfoButtons();
+    });
+
     observer.observe(document.body, {
       childList: true,
       subtree: true
@@ -54,5 +74,4 @@
   } else {
     init();
   }
-
 })();
