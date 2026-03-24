@@ -1,6 +1,4 @@
 (function () {
-  console.log("field-info1 loaded");
-
   const tooltipText = "A dwelling limit is the maximum amount your home insurance pays.";
 
   function normalizeText(text) {
@@ -11,15 +9,9 @@
       .toLowerCase();
   }
 
-  function alreadyHasIcon(node) {
-    return !!node.querySelector(".custom-info-wrap");
-  }
-
-  function tryAttachToNode(node) {
-    if (!node || alreadyHasIcon(node)) return false;
-
-    const text = normalizeText(node.textContent);
-    if (!text.includes("dwelling limit")) return false;
+  function addTooltip(target) {
+    if (!target) return;
+    if (target.querySelector(".custom-info-wrap")) return;
 
     const wrap = document.createElement("span");
     wrap.className = "custom-info-wrap";
@@ -34,42 +26,25 @@
 
     wrap.appendChild(icon);
     wrap.appendChild(tip);
-    node.appendChild(wrap);
-
-    console.log("Attached tooltip to:", node);
-    return true;
+    target.appendChild(wrap);
   }
 
-  function addInfoButtons() {
-    const selectors = [
-      "label",
-      "legend",
-      "span",
-      "div",
-      "p",
-      ".label",
-      ".field-label",
-      ".form_label",
-      ".field-title",
-      ".frm-label",
-      ".title"
-    ].join(",");
+  function findDwellingLimit() {
+    const spans = document.querySelectorAll("p span, span, p");
 
-    const nodes = document.querySelectorAll(selectors);
-    let attached = 0;
-
-    nodes.forEach((node) => {
-      if (tryAttachToNode(node)) attached++;
+    spans.forEach((el) => {
+      const text = normalizeText(el.textContent);
+      if (text === "dwelling limit") {
+        addTooltip(el);
+      }
     });
-
-    console.log("Tooltip attachments:", attached);
   }
 
   function init() {
-    addInfoButtons();
+    findDwellingLimit();
 
     const observer = new MutationObserver(() => {
-      addInfoButtons();
+      findDwellingLimit();
     });
 
     observer.observe(document.body, {
