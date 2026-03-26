@@ -1,62 +1,61 @@
 (function () {
   const tooltipText = "A dwelling limit is the maximum amount your home insurance pays.";
 
+  function normalize(text) {
+    return (text || "").replace(/\s+/g, " ").trim().toLowerCase();
+  }
+
   function addTooltip() {
     const elements = document.querySelectorAll("span, p, div");
 
     elements.forEach((el) => {
-      const text = (el.textContent || "").trim();
+      const text = normalize(el.textContent);
 
-      if (text === "Dwelling Limit" && !el.dataset.infoAdded) {
+      if (text.includes("dwelling limit") && !el.dataset.infoAdded) {
         el.dataset.infoAdded = "true";
 
         const wrap = document.createElement("span");
         wrap.style.position = "relative";
         wrap.style.display = "inline-block";
-        wrap.style.marginLeft = "6px";
+        wrap.style.marginLeft = "8px";
         wrap.style.verticalAlign = "middle";
 
         const icon = document.createElement("span");
-        icon.textContent = "i";
+        icon.textContent = "?";
         icon.style.display = "inline-block";
-        icon.style.width = "18px";
-        icon.style.height = "18px";
+        icon.style.width = "20px";
+        icon.style.height = "20px";
         icon.style.borderRadius = "50%";
-        icon.style.background = "#2b6cff";
-        icon.style.color = "#fff";
-        icon.style.fontSize = "12px";
-        icon.style.lineHeight = "18px";
+        icon.style.background = "blue";
+        icon.style.color = "white";
+        icon.style.fontSize = "14px";
+        icon.style.lineHeight = "20px";
         icon.style.textAlign = "center";
-        icon.style.cursor = "default";
         icon.style.fontWeight = "bold";
+        icon.style.cursor = "default";
 
         const tip = document.createElement("span");
         tip.textContent = tooltipText;
-        tip.style.visibility = "hidden";
-        tip.style.opacity = "0";
+        tip.style.display = "none";
         tip.style.position = "absolute";
-        tip.style.top = "24px";
+        tip.style.top = "26px";
         tip.style.left = "0";
-        tip.style.minWidth = "200px";
-        tip.style.maxWidth = "260px";
+        tip.style.minWidth = "220px";
+        tip.style.maxWidth = "280px";
         tip.style.padding = "8px 10px";
-        tip.style.background = "#111";
-        tip.style.color = "#fff";
+        tip.style.background = "black";
+        tip.style.color = "white";
         tip.style.borderRadius = "8px";
         tip.style.fontSize = "12px";
         tip.style.lineHeight = "1.4";
         tip.style.zIndex = "9999";
-        tip.style.transition = "opacity 0.2s ease";
-        tip.style.pointerEvents = "none";
 
-        wrap.addEventListener("mouseenter", () => {
-          tip.style.visibility = "visible";
-          tip.style.opacity = "1";
+        wrap.addEventListener("mouseenter", function () {
+          tip.style.display = "block";
         });
 
-        wrap.addEventListener("mouseleave", () => {
-          tip.style.visibility = "hidden";
-          tip.style.opacity = "0";
+        wrap.addEventListener("mouseleave", function () {
+          tip.style.display = "none";
         });
 
         wrap.appendChild(icon);
