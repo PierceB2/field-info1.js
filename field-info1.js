@@ -22,7 +22,6 @@
       if (el.dataset.infoAdded) return;
       if (!isVisible(el)) return;
 
-      // skip parent containers that contain a smaller exact match
       const childExactMatch = Array.from(el.querySelectorAll("span, p, div")).some((child) => {
         return child !== el && normalize(child.textContent) === "dwelling limit";
       });
@@ -49,13 +48,12 @@
       icon.style.lineHeight = "18px";
       icon.style.textAlign = "center";
       icon.style.fontWeight = "bold";
-      icon.style.cursor = "default";
+      icon.style.cursor = "pointer";
 
       const tip = document.createElement("span");
       tip.textContent = tooltipText;
-      tip.style.display = "none";
       tip.style.position = "absolute";
-      tip.style.top = "24px";
+      tip.style.top = "26px";
       tip.style.left = "0";
       tip.style.minWidth = "220px";
       tip.style.maxWidth = "280px";
@@ -65,16 +63,22 @@
       tip.style.borderRadius = "8px";
       tip.style.fontSize = "12px";
       tip.style.lineHeight = "1.4";
-      tip.style.zIndex = "9999";
+      tip.style.zIndex = "999999";
       tip.style.boxShadow = "0 6px 18px rgba(0,0,0,0.2)";
       tip.style.whiteSpace = "normal";
+      tip.style.visibility = "hidden";
+      tip.style.opacity = "0";
+      tip.style.transition = "opacity 0.2s ease";
+      tip.style.pointerEvents = "none";
 
       wrap.addEventListener("mouseenter", function () {
-        tip.style.display = "block";
+        tip.style.visibility = "visible";
+        tip.style.opacity = "1";
       });
 
       wrap.addEventListener("mouseleave", function () {
-        tip.style.display = "none";
+        tip.style.visibility = "hidden";
+        tip.style.opacity = "0";
       });
 
       wrap.appendChild(icon);
