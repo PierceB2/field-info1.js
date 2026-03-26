@@ -2,9 +2,10 @@
 
   const FIELD_TOOLTIPS = {
     "dwelling limit": "A dwelling limit is the maximum amount your home insurance pays.",
-    "personal property limit": "This is the amount your insurance covers for belongings inside your home.",
-    "liability limit": "This covers injuries or damage you are legally responsible for.",
-    "medical payments limit": "This covers minor injuries to guests on your property regardless of fault."
+    "other structures %": "How much coverage applies to detached property. (Garage's, Sheds, etc.).",
+    "personal property protection %": "Indicates percentage covering your belongings under homeowner personal property coverage.",
+    "additional living expense %": "This covers minor injuries to guests on your property regardless of fault."
+    "fair rental value %": "This covers minor injuries to guests on your property regardless of fault."
   };
 
   function normalize(text) {
