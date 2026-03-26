@@ -63,13 +63,15 @@
 
       const icon = document.createElement("span");
       icon.textContent = "i";
+
       icon.style.display = "inline-block";
       icon.style.width = "18px";
       icon.style.height = "18px";
       icon.style.marginLeft = "8px";
       icon.style.borderRadius = "50%";
-      icon.style.background = "#2b6cff";
-      icon.style.color = "#fff";
+      icon.style.background = "transparent";
+      icon.style.border = "1px solid #bfbfbf";
+      icon.style.color = "#bfbfbf";
       icon.style.fontSize = "12px";
       icon.style.lineHeight = "18px";
       icon.style.textAlign = "center";
