@@ -12,8 +12,39 @@
            el.offsetParent !== null;
   }
 
+  function getGlobalTooltip() {
+    let tooltip = document.getElementById("global-dwelling-tooltip");
+
+    if (!tooltip) {
+      tooltip = document.createElement("div");
+      tooltip.id = "global-dwelling-tooltip";
+      tooltip.textContent = tooltipText;
+
+      tooltip.style.position = "fixed";
+      tooltip.style.padding = "8px 10px";
+      tooltip.style.background = "#111";
+      tooltip.style.color = "#fff";
+      tooltip.style.borderRadius = "8px";
+      tooltip.style.fontSize = "12px";
+      tooltip.style.lineHeight = "1.4";
+      tooltip.style.minWidth = "220px";
+      tooltip.style.maxWidth = "280px";
+      tooltip.style.boxShadow = "0 6px 18px rgba(0,0,0,0.2)";
+      tooltip.style.zIndex = "9999999";
+      tooltip.style.visibility = "hidden";
+      tooltip.style.opacity = "0";
+      tooltip.style.transition = "opacity 0.15s ease";
+      tooltip.style.pointerEvents = "none";
+
+      document.body.appendChild(tooltip);
+    }
+
+    return tooltip;
+  }
+
   function addTooltip() {
     const elements = document.querySelectorAll("span, p, div");
+    const tooltip = getGlobalTooltip();
 
     elements.forEach((el) => {
       const text = normalize(el.textContent);
@@ -30,17 +61,12 @@
 
       el.dataset.infoAdded = "true";
 
-      const wrap = document.createElement("span");
-      wrap.style.position = "relative";
-      wrap.style.display = "inline-block";
-      wrap.style.marginLeft = "8px";
-      wrap.style.verticalAlign = "middle";
-
       const icon = document.createElement("span");
       icon.textContent = "i";
       icon.style.display = "inline-block";
       icon.style.width = "18px";
       icon.style.height = "18px";
+      icon.style.marginLeft = "8px";
       icon.style.borderRadius = "50%";
       icon.style.background = "#2b6cff";
       icon.style.color = "#fff";
@@ -49,41 +75,26 @@
       icon.style.textAlign = "center";
       icon.style.fontWeight = "bold";
       icon.style.cursor = "pointer";
+      icon.style.verticalAlign = "middle";
 
-      const tip = document.createElement("span");
-      tip.textContent = tooltipText;
-      tip.style.position = "absolute";
-      tip.style.top = "26px";
-      tip.style.left = "0";
-      tip.style.minWidth = "220px";
-      tip.style.maxWidth = "280px";
-      tip.style.padding = "8px 10px";
-      tip.style.background = "#111";
-      tip.style.color = "#fff";
-      tip.style.borderRadius = "8px";
-      tip.style.fontSize = "12px";
-      tip.style.lineHeight = "1.4";
-      tip.style.zIndex = "999999";
-      tip.style.boxShadow = "0 6px 18px rgba(0,0,0,0.2)";
-      tip.style.whiteSpace = "normal";
-      tip.style.visibility = "hidden";
-      tip.style.opacity = "0";
-      tip.style.transition = "opacity 0.2s ease";
-      tip.style.pointerEvents = "none";
-
-      wrap.addEventListener("mouseenter", function () {
-        tip.style.visibility = "visible";
-        tip.style.opacity = "1";
+      icon.addEventListener("mouseenter", function (e) {
+        tooltip.style.visibility = "visible";
+        tooltip.style.opacity = "1";
+        tooltip.style.top = (e.clientY + 14) + "px";
+        tooltip.style.left = (e.clientX + 14) + "px";
       });
 
-      wrap.addEventListener("mouseleave", function () {
-        tip.style.visibility = "hidden";
-        tip.style.opacity = "0";
+      icon.addEventListener("mousemove", function (e) {
+        tooltip.style.top = (e.clientY + 14) + "px";
+        tooltip.style.left = (e.clientX + 14) + "px";
       });
 
-      wrap.appendChild(icon);
-      wrap.appendChild(tip);
-      el.appendChild(wrap);
+      icon.addEventListener("mouseleave", function () {
+        tooltip.style.visibility = "hidden";
+        tooltip.style.opacity = "0";
+      });
+
+      el.appendChild(icon);
     });
   }
 
