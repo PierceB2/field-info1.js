@@ -1,8 +1,17 @@
 (function () {
-  const tooltipText = "A dwelling limit is the maximum amount your home insurance pays.";
+
+  const FIELD_TOOLTIPS = {
+    "dwelling limit": "A dwelling limit is the maximum amount your home insurance pays.",
+    "personal property limit": "This is the amount your insurance covers for belongings inside your home.",
+    "liability limit": "This covers injuries or damage you are legally responsible for.",
+    "medical payments limit": "This covers minor injuries to guests on your property regardless of fault."
+  };
 
   function normalize(text) {
-    return (text || "").replace(/\s+/g, " ").trim().toLowerCase();
+    return (text || "")
+      .replace(/\s+/g, " ")
+      .trim()
+      .toLowerCase();
   }
 
   function isVisible(el) {
@@ -13,12 +22,11 @@
   }
 
   function getGlobalTooltip() {
-    let tooltip = document.getElementById("global-dwelling-tooltip");
+    let tooltip = document.getElementById("global-form-tooltip");
 
     if (!tooltip) {
       tooltip = document.createElement("div");
-      tooltip.id = "global-dwelling-tooltip";
-      tooltip.textContent = tooltipText;
+      tooltip.id = "global-form-tooltip";
 
       tooltip.style.position = "fixed";
       tooltip.style.padding = "8px 10px";
@@ -42,20 +50,19 @@
     return tooltip;
   }
 
-  function addTooltip() {
+  function addTooltipIcons() {
     const elements = document.querySelectorAll("span, p, div");
     const tooltip = getGlobalTooltip();
 
     elements.forEach((el) => {
       const text = normalize(el.textContent);
 
-      if (text !== "dwelling limit") return;
+      if (!FIELD_TOOLTIPS[text]) return;
       if (el.dataset.infoAdded) return;
       if (!isVisible(el)) return;
 
-      const childExactMatch = Array.from(el.querySelectorAll("span, p, div")).some((child) => {
-        return child !== el && normalize(child.textContent) === "dwelling limit";
-      });
+      const childExactMatch = Array.from(el.querySelectorAll("span, p, div"))
+        .some(child => child !== el && normalize(child.textContent) === text);
 
       if (childExactMatch) return;
 
@@ -80,6 +87,7 @@
       icon.style.verticalAlign = "middle";
 
       icon.addEventListener("mouseenter", function (e) {
+        tooltip.textContent = FIELD_TOOLTIPS[text];
         tooltip.style.visibility = "visible";
         tooltip.style.opacity = "1";
         tooltip.style.top = (e.clientY + 14) + "px";
@@ -101,8 +109,8 @@
   }
 
   function init() {
-    addTooltip();
-    const observer = new MutationObserver(addTooltip);
+    addTooltipIcons();
+    const observer = new MutationObserver(addTooltipIcons);
     observer.observe(document.body, { childList: true, subtree: true });
   }
 
@@ -111,4 +119,5 @@
   } else {
     init();
   }
+
 })();
