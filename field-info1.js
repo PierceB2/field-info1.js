@@ -2,10 +2,14 @@
 
   const FIELD_TOOLTIPS = {
     "dwelling limit": "A dwelling limit is the maximum amount your home insurance pays.",
-    "other structures %": "How much coverage applies to detached property. (Garage's, Sheds, etc.).",
-    "personal property protection %": "Indicates percentage covering your belongings under homeowner personal property coverage.",
-    "additional living expense %": "This covers minor injuries to guests on your property regardless of fault."
-    "fair rental value %": "This covers minor injuries to guests on your property regardless of fault."
+    "other structures %": "How much coverage applies to detached property, like garages, sheds, and similar structures.",
+    "personal property protection %": "Indicates the percentage covering your belongings under homeowner personal property coverage.",
+    "additional living expense %": "Percent coverage for temporary living costs after home damage.",
+    "fair rental value %": "Percent coverage replacing lost rental income after property damage occurs.",
+    "family liability protection": "Pays legal costs if your family accidentally hurts someone else.",
+    "all perils deductible": "Amount you pay before insurance covers covered losses from claims.",
+    "hail deductible": "Amount you pay before insurance covers hail damage costs.",
+    "payment plan": "How often and when you pay your insurance bill."
   };
 
   function normalize(text) {
